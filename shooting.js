@@ -1,4 +1,4 @@
-let px = 420 / 2;
+let px = 210;
 let py = 480;
 let framelate = 60;
 let rightPressed = false;
