@@ -22,7 +22,7 @@ let fpscount = Date.now();
 function frame(){
     document.getElementById("hp").innerHTML = enemy_hp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    framelate = 1000 / (Date.now - fpscount);
+    framelate = 1000 / (Date.now(s) - fpscount);
     fpscount = Date.now();
     if(rightPressed){
         px += p_move / (framelate / 60);
