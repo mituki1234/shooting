@@ -125,6 +125,9 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 setInterval(frame,1000/framelate);
 setInterval(() => {
+
+},1000/framelate)
+setInterval(() => {
   if(spacePressed && Date.now() - lastFired > 200){
     bx.push(px + 5);
     by.push(py);
