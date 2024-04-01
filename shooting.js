@@ -1,4 +1,4 @@
-let px = 420 / 2;
+let px = 42 / 2;
 let py = 480;
 let framelate = 60;
 let rightPressed = false;
@@ -8,11 +8,18 @@ let downPressed = false;
 let spacePressed = false;
 let b_move = 5;
 let p_move = 3;
+let enemy_hp = 100;
+let enemy_x = 420 / 2 - 30;
+let enemy_y = 10;
 let bx = [];
 let by = [];
 const canvas = document.getElementById("shooting");
 const ctx = canvas.getContext("2d");
+
+let lastFired = Date.now();
+let hit_enemy_time = Date.now();
 function frame(){
+    document.getElementById("hp").innerHTML = enemy_hp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if(rightPressed){
         px += p_move / (framelate / 60);
@@ -34,7 +41,9 @@ function frame(){
     ctx.fill();
     ctx.closePath();
     b_draw();
-    // プレイヤーの操作判定,描画,球を描画する関数の呼び出し
+    d_enemy();
+    enemy_hit();
+    enemy_move();
 }
 
 function keyDownHandler(e) {
@@ -51,10 +60,10 @@ function keyDownHandler(e) {
       downPressed = true;
     }
     if(e.code === 'Space'){
-      spacePressed = true;
+       spacePressed = true;
     }
 }
-// keydownを判定して操作
+
 function keyUpHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = false;
@@ -69,32 +78,53 @@ function keyUpHandler(e) {
       downPressed = false;
     } 
     if (e.code === 'Space'){
-      spacePressed = false;
+        spacePressed = false;
     }
 }
-// keyupを判定して操作
+
 function b_draw(){
-  for(var i = 0;i <= bx.length;i++){
-    by[i] -= b_move;
-    ctx.beginPath;
-    ctx.fillStyle = "#FFFFFF";
-    ctx.rect(bx[i],by[i], 10, 10);
-    ctx.fill();
-    ctx.closePath();
-    if(by[i] <= 10){
-      by.splice(i,1)
-      bx.splice(i,1)
-    }
-    // 球の描画部分だがなぜか全く違う場所に描画される。
+    var a = -1;
+    do {
+        ctx.beginPath();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.rect(bx[a],by[a], 10, 10);
+        ctx.fill();
+        ctx.closePath();
+        by[a] -= b_move;
+        if(by[a] <= -10){
+            by.splice(a,1)
+            bx.splice(a,1)
+        }
+        ++a;
+    } while(a < bx.length);
+}
+function d_enemy(){
+  ctx.beginPath();
+  ctx.fillstyle = "#FFFFFF";
+  ctx.rect(enemy_x,enemy_y,30,30)
+  ctx.fill();
+  ctx.closePath();
+}
+function enemy_hit(){
+  console.log("what");
+  for(i=0;i <= by.length;i++){
+    if(enemy_x <= bx[i] + 10 && bx[i] <= enemy_x + 30 && enemy_y <= by[i] + 10 && by[i] <= enemy_y + 30){
+      if(Date.now() - hit_enemy_time >= 200){
+        enemy_hp -= 1;
+        hit_enemy_time = Date.now();
+        delete bx[i];
+        delete by[i];
+      }
+    } 
   }
 }
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+setInterval(frame,1000/framelate);
 setInterval(() => {
-  if(spacePressed){
+  if(spacePressed && Date.now() - lastFired > 200){
     bx.push(px + 5);
     by.push(py);
-    // 描画位置を指定する。
+    lastFired = Date.now();
   }
-},200)
-setInterval(frame,1000/framelate);
+},1000/framelate);
