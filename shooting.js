@@ -104,7 +104,7 @@ function b_draw(){
 function d_enemy(){
   ctx.beginPath();
   ctx.fillstyle = "#FFFFFF";
-  ctx.rect(enemy_x,enemy_y,30,30)
+  ctx.rect(enemy_x,enemy_y,30,30);
   ctx.fill();
   ctx.closePath();
 }
