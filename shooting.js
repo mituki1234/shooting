@@ -18,9 +18,12 @@ const ctx = canvas.getContext("2d");
 
 let lastFired = Date.now();
 let hit_enemy_time = Date.now();
+let fpscount = Date.now();
 function frame(){
     document.getElementById("hp").innerHTML = enemy_hp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    framelate = 1000 / (Date.now - fpscount);
+    fpscount = Date.now();
     if(rightPressed){
         px += p_move / (framelate / 60);
     } 
